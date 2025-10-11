@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+*.log
+
+# Docker / results
+reports/
+results/
+*.csv
+
+# System / editor files
+.DS_Store
+.vscode/
+.idea/
