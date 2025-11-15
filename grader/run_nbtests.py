@@ -7,8 +7,8 @@ import types
 import csv
 import ast
 
-# Updated path for container environment
-RESULTS_CSV = "/Submissions/grades.csv" # ensure /results is mounted when running container
+# Updated path for container environment - save in Submissions/results
+RESULTS_CSV = "/Submissions/results/grades.csv"
 
 def load_notebook(nb_path):
     return nbformat.read(nb_path, as_version=4)

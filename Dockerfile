@@ -4,7 +4,7 @@ FROM sagemath/sagemath:latest
 # Set working directory inside container
 WORKDIR /grader
 
-# Copy grader folder contents into /grader (not grader/grader)
+# Copy grader folder contents into /grader
 COPY grader/ .
 
 # Install Python dependencies required for grading

@@ -4,7 +4,7 @@ Entrypoint for the SageMath grading container.
 
 - Assumes student notebooks are mounted at /Submissions
 - Grades all notebooks automatically
-- Outputs results to /Submissions/grades.csv
+- Outputs results to /Submissions/results/grades.csv
 """
 
 import os
@@ -14,7 +14,7 @@ from pathlib import Path
 
 # Hardcoded paths inside the container
 SUBMISSIONS = Path("/Submissions")        # mounted submissions folder
-RESULTS = Path("/Submissions")            # save results in submissions folder
+RESULTS = Path("/Submissions/results")    # results folder inside submissions
 GRADER = Path("/grader/run_nbtests.py")  # grader script inside container
 
 def main():
@@ -29,13 +29,13 @@ def main():
         print("  docker run -v /path/to/submissions:/Submissions sage-grader:latest")
         sys.exit(1)
     
-    # No need to create RESULTS directory - it's the same as SUBMISSIONS which already exists
-    # RESULTS.mkdir(parents=True, exist_ok=True)  # REMOVE THIS LINE
+    # Create results directory inside submissions
+    RESULTS.mkdir(parents=True, exist_ok=True)
     
-    # Find all .ipynb files (skip checkpoints)
+    # Find all .ipynb files (skip checkpoints and results folder)
     notebooks = sorted(
         p for p in SUBMISSIONS.rglob("*.ipynb")
-        if ".ipynb_checkpoints" not in str(p)
+        if ".ipynb_checkpoints" not in str(p) and "/results/" not in str(p)
     )
 
     if not notebooks:
