@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-import os, nbformat, unittest, io, types, csv, ast
+import os
+import nbformat
+import unittest
+import io
+import types
+import csv
+import ast
 
-# Path to CSV in results/
-RESULTS_CSV = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "results",
-    "grades.csv"
-)
+# Updated path for container environment
+RESULTS_CSV = "/Submissions/grades.csv" # ensure /results is mounted when running container
 
 def load_notebook(nb_path):
     return nbformat.read(nb_path, as_version=4)
@@ -40,7 +42,7 @@ def extract_student_ids(first_cell_src):
     return ["UNKNOWN"]
 
 def split_cells(nb):
-    """Split notebook into first cell (ID), impl cells, and test cells"""
+    """Split notebook into first cell (ID), implementation cells, and test cells"""
     impl, tests = [], []
     first_cell = ""
     for i, cell in enumerate(nb.cells):
@@ -78,11 +80,11 @@ def run_unittests(test_code_combined, g):
 def append_csv(student_ids, total, passed, failed):
     """Append one line per student (single or group) to grades.csv"""
     score = round((passed / total) * 100, 2) if total > 0 else 0.0
-    new = not os.path.exists(RESULTS_CSV)
     os.makedirs(os.path.dirname(RESULTS_CSV), exist_ok=True)
+    new_file = not os.path.exists(RESULTS_CSV)
     with open(RESULTS_CSV, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        if new:
+        if new_file:
             w.writerow(["student_id", "total", "passed", "failed", "score"])
         for sid in student_ids:
             w.writerow([sid, total, passed, failed, score])
